@@ -1,0 +1,17 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  width:min-content
+}
+form>{
+  flex:none
+}
+button{
+  width:20px;
+  height: 20px;
+}
