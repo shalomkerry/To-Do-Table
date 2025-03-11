@@ -14,4 +14,41 @@ form>{
 button{
   width:20px;
   height: 20px;
+  margin-right:10px;
 }
+.main{
+  
+  /* justify-content: center; */
+}
+li{
+  list-style: none;
+}
+.todo_list{
+
+  display: flex;
+  flex-direction: column;
+  width:97%;
+  max-width: 455px;
+
+  margin-top:27px;
+  /* align-self: center;
+  align-items: center;
+  gap:2px; */
+}
+
+.todo_items_left{
+   display: flex;
+  flex-direction: column;
+  width:auto;
+  max-width: 300px;
+  background-color: transparent;
+  color:black;
+  border:none; 
+}
+button:hover{
+  cursor: pointer;
+}
+svg{
+  display: block ;
+}
+

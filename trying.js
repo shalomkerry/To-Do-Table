@@ -52,6 +52,12 @@ nums.push(patter)
 words.push(wor)
 })
 let result = nums.map((x,i)=>({x,y:words[i]}))
-for(let i = 0; i<result.length;i++){
-    console.log(' '.repeat((result[i].x).length), result[i].x,result[i].y)
+// for(let i = 0; i<result.length;i++){
+//     console.log(' '.repeat((result[i].x).length), result[i].x,result[i].y)
+// }
+let s = '123123123';
+function charCount(str,char){
+    const count = str.split(char).length -1
+    return count
 }
+console.log(charCount(s,'1'))
