@@ -9,7 +9,7 @@ function ToC({item,projectName}){
         {item?(
 
             item?.map((elem,index)=>(
-                <ListItems key={index} item={elem}/>
+                <ListItems key={index} item={elem} projectName={projectName}/>
             )
         )
         ):(

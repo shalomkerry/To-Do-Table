@@ -2,18 +2,14 @@ import useListStore from "../store/useListStore";
 
 function ListItems({item}){
     
-let {projects,currentProject,setName,saveTaskList,saveProjects} = useListStore()
+let {projects,currentProject,setName,saveTaskList,saveProjects,toggleTaskCompletion} = useListStore()
 
-    const completeTask = ()=>{
-        
-        console.log(item.id)
-} 
 
     return <>
     {item?( <>
 
         <li id={item.id} style= {{marginLeft:`${item.length}em`}} className="todo_item">
-            <button className="todo_items_left" onClick={completeTask} >
+            <button className="todo_items_left" onClick={toggleTaskCompletion} >
                 
                 {item.completed?
                 <p style={{color:'blue'}}>{item.number}{item.word}</p>:

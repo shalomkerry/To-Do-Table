@@ -42,22 +42,7 @@ let trying = `1. Whetting Your Appetite
     4.11. Something to Check
 `
 let finalList = trying.split('\n').filter(x=>x!='').map(x=>x.trim())
-const pattern = /^\s*([\d]+(?:[\.\-\)\:]\d+)*)/g;
-let nums = []
-let words = []
-finalList.forEach(x=>{
-    let patter = x.match(pattern)[0]
-    let wor  = x.match(/([^.\d])+/g)[0]
-nums.push(patter)
-words.push(wor)
-})
-let result = nums.map((x,i)=>({x,y:words[i]}))
-// for(let i = 0; i<result.length;i++){
-//     console.log(' '.repeat((result[i].x).length), result[i].x,result[i].y)
-// }
-let s = '123123123';
-function charCount(str,char){
-    const count = str.split(char).length -1
-    return count
-}
-console.log(charCount(s,'1'))
+const pattern = "/^\s*([\d]+(?:[\.\-\)\:]\d+)*)/g;"
+let word = 'shalom'
+
+console.log(word+Math.floor(Math.random()*10))
