@@ -4,7 +4,7 @@ import ToC from './components/Task_Items';
 import useListStore from './store/useListStore';
 
 function App() {
-let {projects,currentProject,setName,saveTaskList,setId,toggleTaskCompletion,saveProjects} = useListStore()
+let {projects,currentProject,setName,saveTaskList,setId,toggleTaskCompletion,saveProjects,deleteProject,completeAll} = useListStore()
 function handleSubmit(e){
   e.preventDefault()
   formatTaskList(userInput)
@@ -42,7 +42,7 @@ wholeArray.push(result)
 
 addItem(wholeArray)
 setName(projectNameInput)
-setId('one')
+setId()
 wholeArray.forEach(x=>{
   saveTaskList(x)
 })
@@ -69,8 +69,10 @@ let [projectNameInput,setProjectNameInput] = useState('')
 
 useEffect(()=>{
   console.log("Final list updated",finalList)
-  console.log(projects)
 },[finalList])
+useEffect(()=>{
+console.log(projects)
+},[projects])
   return(
     <>
     <div className='cube'>
@@ -92,22 +94,29 @@ useEffect(()=>{
     {projects && projects.length>0?
     (<>
     {projects.map((project)=>(
-      <>
-      <p>{project.name}     </p>
-      {project.tasks.map((item)=>
-      <>
-
-      <li>
-        <button onClick={()=>toggleTaskCompletion(project.id,item.id)}>
+      <div key={project.id}className='project' style={{marginTop:'2em'}}>
+      <button onClick={()=>completeAll(project.id)}>this</button>
+      {project.tasks && project.tasks.length>0?
+      project.tasks.map((item)=>
+        <>
+        
+          <li key={item.id}>
+        <button className='todo_items_left'onClick={()=>toggleTaskCompletion(project.id,item.id)}>
         {item.completed?
       <p style={{color:'blue'}}>{item.word}</p>  
       :<p>{item.word}</p>}
         </button>
       </li>
-      </>
-      )}
 
-      </>
+        </>
+      )
+
+      :<>nothing</>
+
+    }
+
+      <button onClick={()=>deleteProject(project.id)}>Delete the Project</button>
+      </div>
     ))}
     </>)
     :    

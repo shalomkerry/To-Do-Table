@@ -53,7 +53,26 @@ const  useListStore = create((set)=>({
             }
             :project
             ),
+       deleteProject:(projectId)=>
+        set((state)=>({
+            projects:state.projects.filter((item)=>String(item.id)!==String(projectId))
+        })) 
      })),
+
+        completeAll:(projectId)=>
+            set((state)=>({
+                projects:state.projects.map((project)=>{
+    return (String(project.id)===String(projectId)?
+                    {
+                        ...project,
+                        tasks:project.tasks.map((task)=>({
+                           ...task,completed:!task.completed
+                        
+                        })
+                        )
+                    }:project
+                )})
+            })),
 
 }))
 export default useListStore
