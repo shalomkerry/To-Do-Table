@@ -1,6 +1,10 @@
 import { create } from "zustand";
+const loadTask=()=>{
+    const savedProject = localStorage.getItem('project')
+    return savedProject?JSON.parse(savedProject):[]
+}
 const  useListStore = create((set)=>({
-    projects :[],
+    projects :loadTask(),
     currentProject: {id:'',name:"",tasks:[]},
     
     setName:(name)=>
@@ -31,20 +35,27 @@ const  useListStore = create((set)=>({
         set((state)=>{
             if(!state.currentProject.name.trim() || state.currentProject.length === 0)
                 return state
+
+            const updatedProject = [...state.projects,state.currentProject] 
+            localStorage.setItem('project',JSON.stringify(updatedProject))
+            
             return{
-                
-                projects:[...state.projects,state.currentProject],
+                projects:updatedProject,
                 currentProject:{id:'',name:"",tasks:[]}
             }
-        }),
+
+        }
+
+
+    ),
 
      toggleTaskCompletion: (projectId,taskId) =>
-    set((state) => ({
-            projects:state.projects.map((project)=>
+    set((state) => {
+          let updatedProject = state.projects.map((project)=>
             project.id === projectId?
-            {
+          {
                 ...project,
-                tasks:project.tasks.map((task)=>
+            tasks:project.tasks.map((task)=>
                 task.id==taskId?
                 {
                 ...task,completed:!task.completed
@@ -52,16 +63,25 @@ const  useListStore = create((set)=>({
                 ),
             }
             :project
-            ),
-       deleteProject:(projectId)=>
-        set((state)=>({
-            projects:state.projects.filter((item)=>String(item.id)!==String(projectId))
-        })) 
-     })),
+            )
+            localStorage.setItem('project',JSON.stringify(updatedProject))
+            return{
+                projects:updatedProject
+            }
+     }),
 
+       deleteProject:(projectId)=>
+        set((state)=>{
+            const updatedProject = state.projects.filter((item)=>String(item.id)!==String(projectId)) 
+            localStorage.setItem('project',JSON.stringify(updatedProject))
+
+            return{
+                projects:updatedProject,
+            }
+        }), 
         completeAll:(projectId)=>
-            set((state)=>({
-                projects:state.projects.map((project)=>{
+            set((state)=>{
+               const updatedProject = state.projects.map((project)=>{
     return (String(project.id)===String(projectId)?
                     {
                         ...project,
@@ -72,7 +92,11 @@ const  useListStore = create((set)=>({
                         )
                     }:project
                 )})
-            })),
+                localStorage.setItem('project',JSON.stringify(updatedProject))
+                return{
+                    projects:updatedProject
+                }
+            }),
 
 }))
 export default useListStore

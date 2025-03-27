@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import ToC from './components/Task_Items';
 import useListStore from './store/useListStore';
+import GetFile from './components/Folder';
+import List_Projects from './components/Projects';
 
 function App() {
-let {projects,currentProject,setName,saveTaskList,setId,toggleTaskCompletion,saveProjects,deleteProject,completeAll} = useListStore()
+let store = useListStore()
+let {projects,setName,saveTaskList,setId,saveProjects} = useListStore()
+
 function handleSubmit(e){
   e.preventDefault()
   formatTaskList(userInput)
@@ -27,6 +30,7 @@ words.push(wor[0])
 })
 
 let wholeArray = [] 
+
 if(nums.length>0 && words.length>0){
 for(let i = 0; i<nums.length;i++){
   let  result = {
@@ -46,7 +50,10 @@ setId()
 wholeArray.forEach(x=>{
   saveTaskList(x)
 })
+
 saveProjects()
+
+setFinalList([])
 }
 }else{
   alert('insert a list with numbers and .')
@@ -67,12 +74,6 @@ let [projectName,setProjectName] = useState('')
 let [userInput, setUserInput] = useState('')
 let [projectNameInput,setProjectNameInput] = useState('')
 
-useEffect(()=>{
-  console.log("Final list updated",finalList)
-},[finalList])
-useEffect(()=>{
-console.log(projects)
-},[projects])
   return(
     <>
     <div className='cube'>
@@ -89,40 +90,16 @@ console.log(projects)
         </form>
 
     </div>
+
+    <GetFile/>
     <div className='main'>
-  
     {projects && projects.length>0?
     (<>
-    {projects.map((project)=>(
-      <div key={project.id}className='project' style={{marginTop:'2em'}}>
-      <button onClick={()=>completeAll(project.id)}>this</button>
-      {project.tasks && project.tasks.length>0?
-      project.tasks.map((item)=>
-        <>
-        
-          <li key={item.id}>
-        <button className='todo_items_left'onClick={()=>toggleTaskCompletion(project.id,item.id)}>
-        {item.completed?
-      <p style={{color:'blue'}}>{item.word}</p>  
-      :<p>{item.word}</p>}
-        </button>
-      </li>
-
-        </>
-      )
-
-      :<>nothing</>
-
-    }
-
-      <button onClick={()=>deleteProject(project.id)}>Delete the Project</button>
-      </div>
-    ))}
+    <List_Projects projects={projects}/>
     </>)
     :    
     (<>Nothing to see here</>)
     }
-  
     </div>
     </>
   )

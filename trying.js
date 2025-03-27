@@ -1,48 +1,26 @@
-let trying = `1. Whetting Your Appetite
-2. Using the Python Interpreter
+import { GoogleGenerativeAI } from "@google/generative-ai";
+async function analyzePdf(file){
+    console.log(file);
+const genAI = new GoogleGenerativeAI("AIzaSyBiGHquYY_De4UHWijj5BuPJm3vnj9TMe4");
 
-    2.1. Invoking the Interpreter
-        2.1.1. Argument Passing
-        2.1.2. Interactive Mode
-    2.2. The Interpreter and Its Environment
-        2.2.1. Source Code Encoding
+const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
-3. An Informal Introduction to Python
+const response = await fetch(`http://localhost:3000/read-file/${file}`)
+if(!response.ok) throw new Error("File Nott Found")
+    const data = await response.json()
+const base64pdf = data.content; 
 
-    3.1. Using Python as a Calculator
-        3.1.1. Numbers
-        3.1.2. Text
-        3.1.3. Lists
-    3.2. First Steps Towards Programming
+const result = await model.generateContent([
+    {
+        inlineData: {
+            data: base64pdf,
+            mimeType: "application/pdf",
+        },
+    },
+    'Get all the chapters and sub-chapters from these course Outline in the Order they have been listed us. I want the numbers before the name of the topic and if there are subtopics i want you to give them a form of 1.2 and so on. Dont use the Unit for the main numbers just use their number and dont use asterix or anything to mark them.',
+]);
+// console.log(result.response.text())
+return result.response.text()
 
-4. More Control Flow Tools
-    4.1. if Statements
-    4.2. for Statements
-    4.3. The range() Function
-    4.4. break and continue Statements
-    4.5. else Clauses on Loops
-    4.6. pass Statements
-    4.7. match Statements
-    4.8. Defining Functions
-    4.9. More on Defining Functions
-        4.9.1. Default Argument Values
-        4.9.2. Keyword Arguments
-        4.9.3. Special parameters
-            4.9.3.1. Positional-or-Keyword Arguments
-            4.9.3.2. Positional-Only Parameters
-            4.9.3.3. Keyword-Only Arguments
-            4.9.3.4. Function Examples
-            4.9.3.5. Recap
-        4.9.4. Arbitrary Argument Lists
-        4.9.5. Unpacking Argument Lists
-        4.9.6. Lambda Expressions
-        4.9.7. Documentation Strings
-        4.9.8. Function Annotations
-    4.10. Intermezzo: Coding Style
-    4.11. Something to Check
-`
-let finalList = trying.split('\n').filter(x=>x!='').map(x=>x.trim())
-const pattern = "/^\s*([\d]+(?:[\.\-\)\:]\d+)*)/g;"
-let word = 'shalom'
-
-console.log(word+Math.floor(Math.random()*10))
+}
+export default analyzePdf;
