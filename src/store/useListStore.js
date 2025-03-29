@@ -84,10 +84,10 @@ const  useListStore = create((set)=>({
                const updatedProject = state.projects.map((project)=>{
     return (String(project.id)===String(projectId)?
                     {
+                        
                         ...project,
                         tasks:project.tasks.map((task)=>({
-                           ...task,completed:!task.completed
-                        
+                           ...task,completed:true
                         })
                         )
                     }:project
@@ -98,5 +98,24 @@ const  useListStore = create((set)=>({
                 }
             }),
 
+
+        uncompleteAll:(projectId)=>
+            set((state)=>{
+               const updatedProject = state.projects.map((project)=>{
+    return (String(project.id)===String(projectId)?
+                    {
+                        
+                        ...project,
+                        tasks:project.tasks.map((task)=>({
+                           ...task,completed:false
+                        })
+                        )
+                    }:project
+                )})
+                localStorage.setItem('project',JSON.stringify(updatedProject))
+                return{
+                    projects:updatedProject
+                }
+            }),
 }))
 export default useListStore
