@@ -1,15 +1,12 @@
 import { useEffect } from "react";
 import useListStore from "../store/useListStore";
-
 function List_Projects({projects}){
 let {toggleTaskCompletion,deleteProject,completeAll,uncompleteAll} = useListStore()
 const handleDelte = (projectID)=>{
   deleteProject(projectID)
 }
 return<>
-
-    {projects && projects.length>0?
-    
+    {projects && projects.length>0?    
     (<>
     {projects.map((project)=>(
 
