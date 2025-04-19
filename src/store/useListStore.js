@@ -1,4 +1,15 @@
+
+            const completeAllTasks = (tasks)=>{
+                    return tasks.map((task)=>{
+                        let updated = {...task,completed:true};
+                        if(task.children && task.children.length>0){
+                            updated.children = completeAllTasks(task.children)
+                        }
+                        return updated
+                    }) 
+                    }
 import { create } from "zustand";
+
 const loadTask=()=>{
     const savedProject = localStorage.getItem('project')
     return savedProject?JSON.parse(savedProject):[]
@@ -51,23 +62,44 @@ const  useListStore = create((set)=>({
 
      toggleTaskCompletion: (projectId,taskId) =>
     set((state) => {
-          let updatedProject = state.projects.map((project)=>
-            project.id === projectId?
-          {
-                ...project,
-            tasks:project.tasks.map((task)=>
-                task.id==taskId?
-                {
-                ...task,completed:!task.completed
-                }:task
-                ),
+
+const updateTasks = (tasks)=>{
+            return tasks.map((task)=>{
+                if(task.id===taskId){
+                const newCompleted = !task.completed
+
+               return{
+                ...task,
+                completed:newCompleted,
+               } 
+                }
+                if(task.children && task.children.length>0){
+                    return {
+                        ...task,
+                        children:updateTasks(task.children),
+
+                    }}
+
+            if(task.children){
+                return{
+                    ...task,
+                    children:updateTasks(task.children)
+                }
             }
-            :project
-            )
-            localStorage.setItem('project',JSON.stringify(updatedProject))
-            return{
-                projects:updatedProject
+                return task
+            })
+        }
+        let updatedProjects = state.projects.map((project)=>{
+            if(project.id===projectId){
+                return {
+                    ...project,
+                    tasks:updateTasks(project.tasks)
+                }
             }
+            return project
+        })
+        localStorage.setItem('project',JSON.stringify(updatedProjects))
+        return {projects:updatedProjects}
      }),
 
        deleteProject:(projectId)=>
@@ -79,19 +111,29 @@ const  useListStore = create((set)=>({
                 projects:updatedProject,
             }
         }), 
+        
         completeAll:(projectId)=>
             set((state)=>{
+
+            const completeAllTasks = (tasks)=>{
+                    return tasks.map((task)=>{
+                        let updated = {...task,completed:true};
+                        if(task.children && task.children.length>0){
+                            updated.children = completeAllTasks(task.children)
+                        }
+                        return updated
+                    }) 
+                    }
                const updatedProject = state.projects.map((project)=>{
-    return (String(project.id)===String(projectId)?
+            return (String(project.id)===String(projectId)?
                     {
-                        
                         ...project,
-                        tasks:project.tasks.map((task)=>({
-                           ...task,completed:true
-                        })
-                        )
+                        tasks:completeAllTasks(project.tasks)
+                        
                     }:project
                 )})
+
+
                 localStorage.setItem('project',JSON.stringify(updatedProject))
                 return{
                     projects:updatedProject
@@ -99,23 +141,36 @@ const  useListStore = create((set)=>({
             }),
 
 
-        uncompleteAll:(projectId)=>
+        resetAll:(projectId)=>
             set((state)=>{
+
+            const resetTasks = (tasks)=>{
+                return tasks.map((task)=>{
+                    let updated = {...task,completed:false};
+                    if(task.children&&task.children.length>0){
+                        updated.children = resetTasks(task.children)
+                    }
+                    return updated
+                })
+            }
                const updatedProject = state.projects.map((project)=>{
     return (String(project.id)===String(projectId)?
                     {
                         
                         ...project,
-                        tasks:project.tasks.map((task)=>({
-                           ...task,completed:false
-                        })
-                        )
+                        tasks:resetTasks(project.tasks)
                     }:project
                 )})
                 localStorage.setItem('project',JSON.stringify(updatedProject))
                 return{
                     projects:updatedProject
                 }
+            }),
+        progress: '',
+
+        setProgress: ()=>
+            set((state)=>{
+                state.progress
             }),
 }))
 export default useListStore

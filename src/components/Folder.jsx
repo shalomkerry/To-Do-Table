@@ -11,6 +11,8 @@ let [userInput, setUserInput] = useState('')
 let [projectNameInput,setProjectNameInput] = useState('')
 let [isLoading, setLoading] = useState(false)
 let [finished,setFinished] = useState(false)
+let [error, setError] = useState(false)
+let [typeOfError, setTypeOfError] = useState('')
 
 const [selectedFile,setFile] = useState(null);
 const [fileName, setFileName] = useState()
@@ -24,41 +26,70 @@ function handleSubmit(e){
 }
 
 function formatTaskList(list){
-const pattern = /^\s*([\d]+(?:[\.\-\)\:]\d+)*[\.])/g;
+const pattern = /^\s*([\d]+(?:[\.\-\)\:]\d+)*)/g;
 
-if(pattern.test(list)){
+ if(pattern.test(list)){
 let arrayWords = list.split('\n').filter(x=>x!='').map(x=>x.trim())
-let nums = []
+let numbers = []
 let words = []
 arrayWords.forEach(x=>{
     let patter = x.match(pattern)
     let wor  = x.match(/([^.\d])+/g)
+    
     if(patter && wor){
-nums.push(patter[0])
-words.push(wor[0])
+  numbers.push(patter[0])
+  words.push(wor[0])
     }
 })
 
-let wholeArray = [] 
+let pack = [];
+let subset = []
+  for(let i = 0; i<numbers.length; i++){
+    if(Number.isInteger(+numbers[i])){
+      let result = {
+        number:numbers[i],
+        word:words[i],
+        id:Date.now() + Math.random(),
+      }
+      pack.push(result)
 
-if(nums.length>0 && words.length>0){
-for(let i = 0; i<nums.length;i++){
-  let  result = {
-
-  number:nums[i],
-  word:words[i],
-  length:nums[i].split('.').length,
-  id:Date.now() + Math.random(),
-  completed:false,
-  }
-wholeArray.push(result)
+    }
+    else{
+      let result = {
+        number:numbers[i],
+        word:words[i],
+        depth:numbers[i].split('.').length-1,
+        id:Date.now() + Math.random(),
+        completed:false,
+      }
+    subset.push(result)
+      }
 }
 
-addItem(wholeArray)
+let children = []
+
+let wholeArray = [] 
+
+    if(numbers.length>0 && words.length>0){
+for(let j = 0; j<pack.length;j++){
+let ones = subset.filter(x=>x.number.startsWith(`${pack[j].number}`))
+    let nest = {
+      number:pack[j].number,
+      word:pack[j].word,
+      completed:false,
+      children:ones,
+      id:Date.now()+ Math.random()
+    }
+    children.push(nest)
+  }
+
+addItem(children)
 setName(projectNameInput)
 setId()
-wholeArray.forEach(x=>{
+
+children.forEach(x=>{
   saveTaskList(x)
+  // x.children.length>0?x.children.map(j=>saveTaskList(j)):''
 })
 
 saveProjects()
@@ -110,7 +141,15 @@ setProjectNameInput('')
     setLoading(false)
     setFinished(true)
     }
+  
+else{
+
+  setTypeOfError(`Didn't get the file`)
+  setLoading(false)
+  setError(true)
+}  
   }
+
   const fileData = ()=>{
     if(selectedFile){
 
@@ -143,6 +182,7 @@ setProjectNameInput('')
    </button>
   <p>{isLoading?'file being processed':''}</p>
  <p>{finished?'Done':''}</p> 
+ <p>{error?`Error Loading file encountered ${typeOfError}`:''}</p>
   </form> 
   {fileData()}
 
@@ -158,5 +198,4 @@ setProjectNameInput('')
     </div>
   </>
 }
-//checking if this part only gets added
 export default GetFile
