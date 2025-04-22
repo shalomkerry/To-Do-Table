@@ -9,9 +9,10 @@ let {progress, setProgress} = useState([])
 const handleDelte = (projectID)=>{
   deleteProject(projectID)
 }
-useEffect(()=>{
-  console.log(projects)
-},[projects])
+
+// useEffect(()=>{
+//   console.log(projects)
+// },[projects])
 return<>
     {projects && projects.length>0?    
     (<>

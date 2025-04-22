@@ -8,6 +8,17 @@
                         return updated
                     }) 
                     }
+
+
+            const uncompleteAllTasks = (tasks)=>{
+                    return tasks.map((task)=>{
+                        let updated = {...task,completed:false};
+                        if(task.children && task.children.length>0){
+                            updated.children = completeAllTasks(task.children)
+                        }
+                        return updated
+                    }) 
+                    }
 import { create } from "zustand";
 
 const loadTask=()=>{
@@ -67,20 +78,22 @@ const updateTasks = (tasks)=>{
             return tasks.map((task)=>{
                 if(task.id===taskId){
                 const newCompleted = !task.completed
-
-               return{
+                const updateTask = {
                 ...task,
                 completed:newCompleted,
-               } 
+                }                    
+                if(!newCompleted && (task.children &&task.children.length>0)){
+                    updateTask.children = uncompleteAllTasks(task.children)
+                    return updateTask
                 }
-                if(task.children && task.children.length>0){
-                    return {
-                        ...task,
-                        children:updateTasks(task.children),
-
-                    }}
+                if(newCompleted && (task.children &&task.children.length>0)){
+                   updateTask.children = completeAllTasks(task.children)
+                   return updateTask
+                }
+               return updateTask                }
 
             if(task.children){
+
                 return{
                     ...task,
                     children:updateTasks(task.children)
@@ -89,6 +102,7 @@ const updateTasks = (tasks)=>{
                 return task
             })
         }
+
         let updatedProjects = state.projects.map((project)=>{
             if(project.id===projectId){
                 return {
