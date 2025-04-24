@@ -19,6 +19,7 @@
                         return updated
                     }) 
                     }
+import { all } from "axios";
 import { create } from "zustand";
 
 const loadTask=()=>{
@@ -93,12 +94,19 @@ const updateTasks = (tasks)=>{
                return updateTask                }
 
             if(task.children){
-
+                const updatedChildren = updateTasks(task.children)
+                let allCompleted = updatedChildren.every(child=>child.completed == true)
+                if(allCompleted){
+                    task.completed = true
+                }else if(!allCompleted){
+                    task.completed = false
+                }
                 return{
                     ...task,
-                    children:updateTasks(task.children)
+                    children:updateTasks(task.children),
                 }
             }
+
                 return task
             })
         }
