@@ -11,22 +11,31 @@ const handleDelte = (projectID)=>{
 }
 
 // useEffect(()=>{
-//   console.log(projects)
+//   setCompleted()
 // },[projects])
 return<>
     {projects && projects.length>0?    
     (<>
 
     {projects.map((project,id)=>(
-      <div key={project.id}className='project' style={{marginTop:'2em'}}>
-        <h2 >{projects[id].tasks.filter(x=>x.completed).length}/{projects[id].tasks.length}</h2>
-        <h3 >{project.name}</h3>
-      <button onClick={()=>completeAll(project.id)}>complete</button>
-
+      <div key={project.id}className='project'>
+        <div className="countProgress">
+        <div className="projectNameContainer"><h3>{project.name}</h3></div>
+        <div className="progressCounterContainer">
+          <p>{projects[id].tasks.filter(x=>x.completed).length}/{projects[id].tasks.length}</p>
+          </div>
+        </div>
+        
+        <div id='myProgress'>
+          <div className="myBar" style={{width:`${projects[id].tasks.filter(x=>x.completed).length*100/projects[id].tasks.length}%`}}>
+            <p></p>
+          </div>
+        </div>
+    <button onClick={()=>completeAll(project.id)}>complete</button>
       <button onClick={()=>resetAll(project.id)}>reset</button>
       {project.tasks && project.tasks.length>0?
       project.tasks.map((item)=>
-       <div key={item.id}> 
+       <div className={`toDO--Item ${item.id}`}key={item.id}> 
         {item.children && item.children.length>0?(
           <div>
           <li>
@@ -34,15 +43,15 @@ return<>
       <p>{item.number}{item.word}</p>
         </button>
       </li>
+      <div className="">
       {item.children.map((ele)=>
-      <div key={ele.id}>
-          <li>
+          <li key={ele.id}>
         <button  className={`todo_items_left ${ele.completed? 'item_completed':''}`}onClick={()=>toggleTaskCompletion(project.id,ele.id)}>
       <p>{ele.number}{ele.word}</p>
         </button>
       </li>
-        </div> 
       )}
+      </div>
           </div>
         ):(
         <div key={item.id}>

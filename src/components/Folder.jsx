@@ -23,6 +23,8 @@ let {projects,setName,saveTaskList,setId,saveProjects} = useListStore()
 function handleSubmit(e){
   e.preventDefault()
   formatTaskList(userInput)
+  setFile(null)
+  
 }
 
 function formatTaskList(list){
@@ -152,48 +154,48 @@ else{
 
   const fileData = ()=>{
     if(selectedFile){
-
       return(
         <div>
           <h1>{selectedFile.name}</h1>
         </div>
       )
     }
-    return <h2>Select a file please</h2>
+    return <p>Insert a course outline file (pdf only)</p>
   }
   return <>
   <div className='cube'>
-      <div id='h1--background'>
+      <div className='h1--background'>
         <h1>List Task</h1>
         </div>
-
-        <form onSubmit={handleSubmit}>
-         <label htmlFor="projectName">Enter Project Name:</label> 
-         <input type="text" name='projectName' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} />
-         <label htmlFor="textArea"></label>
-          <textarea name="textArea" id="" width='max-content' height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
-          <input type="submit" />
+        <form className='formInput' onSubmit={handleSubmit}>
+         <label htmlFor="projectName" className='labelName'>Enter Project Name:</label> 
+         <input type="text" className='inputName' name='projectName' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} />
+         <label htmlFor="textArea" className='labelProject'>Enter List</label>
+          <textarea name="textArea" className='inputList' id="" width='max-content' height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
+          <input type="submit" className='submitBtn' value='Start Studying'/>
         </form>
-    </div>
-
-  <form onSubmit={onFileUpload}>
+  <form onSubmit={onFileUpload} className='secondForm'>
+   <div className="fileInput">
    <input type="file" onChange={(e)=>onFileChange (e)} /> 
-   <button type="submit">Submit
+    </div> 
+   {fileData()}
+   <button type="submit" className='secondForm-submit'>Submit
    </button>
   <p>{isLoading?'file being processed':''}</p>
  <p>{finished?'Done':''}</p> 
  <p>{error?`Error Loading file encountered ${typeOfError}`:''}</p>
   </form> 
-  {fileData()}
+    </div>
 
-
-    <div className='main'>
-    {projects && projects.length>0?
-    (<>
-    <List_Projects projects={projects}/>
-    </>)
+  <hr style={{width:"100%", border:"none",height:'1px', backgroundColor:'black'}}/>
+<div className="separate"></div>
+    <div className='projects'>
+    {projects && projects.length>0?(
+        <List_Projects projects={projects}/>
+      
+    )
     :    
-    (<>Nothing to see here</>)
+    (<p>No project started yet</p>)
     }
     </div>
   </>

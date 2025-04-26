@@ -47,15 +47,20 @@ textarea {
   margin: 0;
 }
 button,
-input {
+input,textarea {
   overflow: visible;
+  border:none;
 }
 input[type="text"] {
   border-radius: 0;
+  /* all:unset; */
 }
+/* input:focus, textarea:focus{
+  outline: none;
+} */
 body {
-  background-color: #f5f5f5;
-  color: #4d4d4d;
+  background-color: #2E293A;
+  color: #ffff;
   font:
     1.6rem/1.25 Arial,
     sans-serif;
@@ -69,11 +74,159 @@ body {
     line-height: 1.31579;
   }
 }
+
+input{
+  border:none;
+}
+/* #root{
+  width:100vw;
+} */
 /* End resets */
 
+/* Header Part */
+
+.cube{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.h1--background{
+ width:29.13rem;
+ height:6.63rem;
+ margin-top:6.7rem;
+ background-color:#71627A; 
+ border-radius: 20px; 
+ position: relative;
+}
+
+.h1--background>h1{
+  position: absolute; 
+  top:25%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  font-size:2.69rem;
+}
+
+.formInput{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr ;
+  grid-template-rows:auto;
+  grid-template-areas: 
+  ' label label input input  '
+  ' label2 label2 input2 input2 '
+  ' .  .   . .  '
+  ;
+  margin-top:4em;
+}
+
+.submitBtn{
+ margin-top:4em;
+ padding:.5em;
+ border-radius: 57px;
+ font-size:1.06em;
+  grid-column:2 / span 2;
+  justify-self:center;
+}
+
+.inputName{
+margin-bottom: 2em;;
+grid-area:input;
+width:20em;
+height:2.44em;
+}
+
+.inputList{
+  grid-area:input2;
+  width:24.75em;
+}
+.labelName{
+  grid-area:label;
+  font-size:1.82em;
+}
+
+.labelProject{
+  grid-area:label2;
+
+  font-size:1.82em;
+}
+
+/* File Upload */
+
+.fileInput{
+  display: flex;
+  justify-content: center;
+  max-width:max-content;
+  padding:0.2em 2em;
+  margin-top:3em;
+  background: #B6AFBA;
+  font-size:1.1em;
+  border-radius: 12px;
+}
+
+.separate{
+  width:100%;
+  height: 2em;
+  background-color: #5B4965;
+  margin-bottom: 2em;
+}
+
+/* End Header Part */
+
+
+
+/* Projects Part */
+.projects{
+  display: grid;
+  grid-template-columns:repeat(2, 1fr);
+  grid-template-rows:repeat(2, 1fr);
+  gap:20px;
+}
 .item_completed{
   animation: alternate;
-  
   text-decoration: line-through;
   color:navy;
 }
+
+.project{
+  border:1px solid #ffff;
+  width:max-content
+  }
+.countProgress{
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+  }
+
+.projectNameContainer{
+  background:#71627A;
+  padding:0.2em;
+  width:max-content;
+  font-size:0.8em;
+  font-weight: 800;
+}
+.progressCounterContainer{
+  position:absolute;
+  right:0%
+}
+
+li{
+  list-style: none;
+}
+
+#myProgress{
+  width: 100%;
+  background-color: #D9D9D9;
+}
+
+.myBar{
+  width:20%;
+  height:30px;
+  background-color:#E9B0B0;
+}
+
+
+
+/* End of Projects Part */
