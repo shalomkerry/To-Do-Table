@@ -76,6 +76,8 @@ const  useListStore = create((set)=>({
 
 const updateTasks = (tasks)=>{
             return tasks.map((task)=>{
+                // console.log(task,task.children,taskId)
+
                 if(task.id===taskId){
                 const newCompleted = !task.completed
                 const updateTask = {
@@ -90,20 +92,19 @@ const updateTasks = (tasks)=>{
                    updateTask.children = completeAllTasks(task.children)
                    return updateTask
                 }
+
                return updateTask                }
 
-            if(task.children){
-                const updatedChildren = updateTasks(task.children)
-                let allCompleted = updatedChildren.every(child=>child.completed === true)
-                if(allCompleted){
+            if(task.children && task.children.length>0){
 
-                    if(task.id===taskId){
-                        task.completed = true
-                    }
-                }else if(!allCompleted){
-                    if(task.id===taskId){
-                    task.completed = false
-                    }
+                const updatedChildren = updateTasks(task.children)
+                let allCompleted = updatedChildren.every(child=>child.completed == true)
+                if(allCompleted && (task.children[0].number.slice(0,1) == task.number)){
+                    task.completed = true;
+                   }
+                   else if(!allCompleted){
+                        task.completed = false
+                    
                 }
                 return{
                     ...task,

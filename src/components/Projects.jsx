@@ -1,5 +1,7 @@
 import { useState,useEffect } from "react";
 import useListStore from "../store/useListStore";
+import { ProgressBar } from "react-bootstrap";
+import { SiElsevier } from "react-icons/si";
 function List_Projects({projects}){
 let {toggleTaskCompletion,deleteProject,completeAll,resetAll} = useListStore()
 let {completed, setCompleted} = useState([])
@@ -10,15 +12,28 @@ const handleDelte = (projectID)=>{
   deleteProject(projectID)
 }
 
+const handleToggle = (taskId)=>{
+  let buttons = document.querySelectorAll(`.toggle-btn[data-task-id="${taskId}"]`)
+  let allToggles = document.querySelectorAll(`.item-children[data-task-id="${taskId}"]`)
+
+  allToggles.forEach(toggle=>{
+    const isActive = toggle.classList.toggle('active');
+    buttons.forEach(btn=>{
+      btn.textContent =isActive ? 'Hide SubTopics':'Show SubTopics'
+    })
+  })
+}
 // useEffect(()=>{
-//   setCompleted()
-// },[projects])
+//   console.log(projects)
+// },[projects[1]])
 return<>
     {projects && projects.length>0?    
     (<>
 
     {projects.map((project,id)=>(
       <div key={project.id}className='project'>
+
+        
         <div className="countProgress">
         <div className="projectNameContainer"><h3>{project.name}</h3></div>
         <div className="progressCounterContainer">
@@ -31,36 +46,38 @@ return<>
             <p></p>
           </div>
         </div>
-    <button onClick={()=>completeAll(project.id)}>complete</button>
-      <button onClick={()=>resetAll(project.id)}>reset</button>
+        <div className="buttons">
+    <button onClick={()=>completeAll(project.id)} className='project-btn complete-btn'>complete</button>
+    <button onClick={()=>resetAll(project.id)} className="project-btn reset-btn">reset</button>
+    <button onClick={()=>handleDelte(project.id)} className="project-btn delete-btn">delete</button>
+        </div>
       {project.tasks && project.tasks.length>0?
       project.tasks.map((item)=>
-       <div className={`toDO--Item ${item.id}`}key={item.id}> 
+       <div className='todo-item' key={item.id}> 
         {item.children && item.children.length>0?(
           <div>
-          <li>
-        <button  className={`todo_items_left ${item.completed? 'item_completed':''}`}onClick={()=>toggleTaskCompletion(project.id,item.id)}>
-      <p>{item.number}{item.word}</p>
+            <div className="list-item">
+        <button  className='list-Button' onClick={()=>toggleTaskCompletion(project.id,item.id)}>
+      <p className={` ${item.completed? 'item_completed':''} todo_items_left`}><span className="change">{item.number}{item.word}</span></p>
         </button>
-      </li>
-      <div className="">
+        <button className= {`toggle-btn project-btn`} data-task-id={`${item.id}`} onClick={()=>handleToggle(item.id)}>Show Sub-topics</button>
+            </div>
+      <div className={`item-children `} data-task-id={`${item.id}`}>
       {item.children.map((ele)=>
-          <li key={ele.id}>
-        <button  className={`todo_items_left ${ele.completed? 'item_completed':''}`}onClick={()=>toggleTaskCompletion(project.id,ele.id)}>
-      <p>{ele.number}{ele.word}</p>
+       <div className="list-item">
+       <button  className='list-Button' onClick={()=>toggleTaskCompletion(project.id,ele.id)}>
+      <p className={`${ele.completed? 'item_completed':''} todo_items_left inner-children`}><span className="change">{ele.number}{ele.word}</span></p>
         </button>
-      </li>
+        </div>
       )}
       </div>
           </div>
         ):(
-        <div key={item.id}>
-          <li >
-        <button style={{marginLeft:`${item.depth * 20}px`}} className={`todo_items_left ${item.completed? 'item_completed':''}`}onClick={()=>toggleTaskCompletion(project.id,item.id)}>
-      <p>{item.number}{item.word}</p>
+    <div key={item.id}>
+        <button style={{marginLeft:`${item.depth * 20}px`}} onClick={()=>toggleTaskCompletion(project.id,item.id)}>
+      <p className={`todo_items_left ${item.completed? 'item_completed':''}`}>{item.number}{item.word}</p>
         </button>
-      </li>
-        </div>
+    </div>
         )  
       }
       </div>
@@ -69,8 +86,6 @@ return<>
       :<>You haven't Started Any projects yet</>
 
     }
-
-      <button onClick={()=>handleDelte(project.id)}>Delete the Project</button>
       </div>
     ))}
 

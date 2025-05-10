@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import analyzePdf from "../../trying"
 import useListStore from "../store/useListStore"
 import List_Projects from "./Projects"
-
+import DragNdrop from "./DragndDrop"
 function GetFile(){
 let store = useListStore()
 let [finalList,setFinalList] = useState([]);
@@ -14,7 +14,7 @@ let [finished,setFinished] = useState(false)
 let [error, setError] = useState(false)
 let [typeOfError, setTypeOfError] = useState('')
 
-const [selectedFile,setFile] = useState(null);
+const [selectedFile,setFile] = useState([]);
 const [fileName, setFileName] = useState()
 
 
@@ -23,9 +23,10 @@ let {projects,setName,saveTaskList,setId,saveProjects} = useListStore()
 function handleSubmit(e){
   e.preventDefault()
   formatTaskList(userInput)
-  setFile(null)
-  
 }
+useEffect(()=>{
+console.log(selectedFile)
+},[selectedFile])
 
 function formatTaskList(list){
 const pattern = /^\s*([\d]+(?:[\.\-\)\:]\d+)*)/g;
@@ -80,7 +81,7 @@ let ones = subset.filter(x=>x.number.startsWith(`${pack[j].number}`))
       word:pack[j].word,
       completed:false,
       children:ones,
-      id:Date.now()+ Math.random()
+      id:Math.random(),
     }
     children.push(nest)
   }
@@ -114,13 +115,13 @@ setProjectNameInput('')
 
   const onFileChange = (event)=>{
     event.preventDefault()
-    setFile(event.target.files[0])
+    let paragraph = document.querySelector('.preview-par')
 
+    setFile(event.target.files[0])
+    paragraph.textContent =`${event.target.files[0].name}` 
   }
   const  onFileUpload = async (e)=>{
-
     e.preventDefault()
-    setLoading(true)
     if(!selectedFile){
       alert('please select a file first')
       return
@@ -134,21 +135,23 @@ setProjectNameInput('')
     })
     const uploadData = await uploadResponse.json()
     const fileResponse = await analyzePdf(selectedFile)
+   console.log(uploadData) 
+    if(fileResponse && !fileResponse.error){
+ let paragraph = document.querySelector('.preview-par') 
+ paragraph.textContent = 'File Uploaded'
+  setFile([])
+ setTimeout(()=>{
+  paragraph.textContent = 'No Files Selected'
+  setLoading(false)
+ },'10000')
 
-    if(fileResponse){
-
-    let name = selectedFile.name
-      setProjectNameInput(`${name}`)
     setUserInput(fileResponse)
-    setLoading(false)
     setFinished(true)
     }
-  
-else{
-
+ 
+else {
+  alert('but there is no file')
   setTypeOfError(`Didn't get the file`)
-  setLoading(false)
-  setError(true)
 }  
   }
 
@@ -162,29 +165,42 @@ else{
     }
     return <p>Insert a course outline file (pdf only)</p>
   }
+
+
   return <>
   <div className='cube'>
-      <div className='h1--background'>
-        <h1>List Task</h1>
+      <div className='title--background'>
+        <h1>Course Checklist</h1>
+          <span>Create and manage your course content</span>
         </div>
-        <form className='formInput' onSubmit={handleSubmit}>
-         <label htmlFor="projectName" className='labelName'>Enter Project Name:</label> 
-         <input type="text" className='inputName' name='projectName' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} />
-         <label htmlFor="textArea" className='labelProject'>Enter List</label>
-          <textarea name="textArea" className='inputList' id="" width='max-content' height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
-          <input type="submit" className='submitBtn' value='Start Studying'/>
+        <div className="input--container">
+      <form className='formInput' onSubmit={handleSubmit}>
+         <label htmlFor="projectName" className='labelName'>Course Name</label> 
+         <input type="text" className='inputName' name='projectName' required placeholder='Enter course name' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} autoComplete="off" />
+         <label htmlFor="textArea" className='labelProject'>Course Content</label>
+          <textarea name="textArea" className='inputList' id="" width='max-content' placeholder='Enter course content'height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
+          <button type="submit" className='submitBtn' >
+        Add Checklist
+          </button>
         </form>
   <form onSubmit={onFileUpload} className='secondForm'>
    <div className="fileInput">
-   <input type="file" onChange={(e)=>onFileChange (e)} /> 
+    <label htmlFor="file_uploads" className="fileLabel">Insert Course Outline File (pdf)</label>
+    <input type="file" id='file_uploads' onChange={(e)=>onFileChange (e)} accept=".pdf" /> 
+    <div className="preview">
+    <p className="preview-par">No files selected</p>
+    </div>
     </div> 
-   {fileData()}
-   <button type="submit" className='secondForm-submit'>Submit
+
+
+  {isLoading?<p className="status status-loading">Chapters Being Extracted</p>
+:''}
+  {error?<p className="status status-error">Error Loading file encountered</p>
+  :''}
+   <button type="submit" className='secondForm-submit'>Extract Outline
    </button>
-  <p>{isLoading?'file being processed':''}</p>
- <p>{finished?'Done':''}</p> 
- <p>{error?`Error Loading file encountered ${typeOfError}`:''}</p>
   </form> 
+        </div>
     </div>
 
   <hr style={{width:"100%", border:"none",height:'1px', backgroundColor:'black'}}/>

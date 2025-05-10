@@ -51,31 +51,31 @@ app.get("/read-file/:filename",(req,res)=>{
     })
 })
 
-let __filename = fileURLToPath(import.meta.url)
-const __direname = path.dirname(__filename)
+// let __filename = fileURLToPath(import.meta.url)
+// const __direname = path.dirname(__filename)
 
-let uploadsDir = path.join(__direname,'uploads')
+// let uploadsDir = path.join(__direname,'uploads')
 
-cron.schedule('* * * * * *',()=>{
-    fs.readdir(uploadsDir,(err,files)=>{
-        if(err) return console.error('Error reading directory', err)
-        files.forEach(file=>{
-    const filepath = path.join(uploadsDir,file)
-    fs.stat(filepath,(err,stats)=>{
-        if(err) return console.error('Error loading file',err)
-        const now = Date.now()
-        const age = now - stats.mtimeMs
+// cron.schedule('* * * * * *',()=>{
+//     fs.readdir(uploadsDir,(err,files)=>{
+//         if(err) return console.error('Error reading directory', err)
+//         files.forEach(file=>{
+//     const filepath = path.join(uploadsDir,file)
+//     fs.stat(filepath,(err,stats)=>{
+//         if(err) return console.error('Error loading file',err)
+//         const now = Date.now()
+//         const age = now - stats.mtimeMs
 
-        if(age>24 * 60 * 60 * 1000){
-            fs.unlink(filepath,err=>{
-                if(err) console.error('Error deleting file',err)
-                else console.log(`Deleted ${file}`)
-            })
-        }
-    })
-})
-    })
-})
+//         if(age>24 * 60 * 60 * 1000){
+//             fs.unlink(filepath,err=>{
+//                 if(err) console.error('Error deleting file',err)
+//                 else console.log(`Deleted ${file}`)
+//             })
+//         }
+//     })
+// })
+//     })
+// })
 
 app.listen(PORT,()=>{
     console.log(`Server running at http://localhost:${PORT}`)
