@@ -1,15 +1,17 @@
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
 async function analyzePdf(file){
-const genAI = new GoogleGenerativeAI("AIzaSyBiGHquYY_De4UHWijj5BuPJm3vnj9TMe4");
+
+const API = import.meta.env.VITE_APP_GOOGLE_API_KEY
+const genAI = new GoogleGenerativeAI(`${API}`);
 
 const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
-const response = await fetch(`http://localhost:3000/read-file/${file.name}`)
+const response = await fetch(`https://list-backend-production-7f51.up.railway.app/read-file/${file.name}`)
 try{
 
 if(!response.ok) throw new Error("File Nott Found")
     const data = await response.json()
-
     const raw = data.content
     const result = await model.generateContent([
     {

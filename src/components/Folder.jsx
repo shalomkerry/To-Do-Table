@@ -25,7 +25,7 @@ function handleSubmit(e){
   formatTaskList(userInput)
 }
 useEffect(()=>{
-console.log(selectedFile)
+// console.log(selectedFile)
 },[selectedFile])
 
 function formatTaskList(list){
@@ -116,26 +116,22 @@ setProjectNameInput('')
   const onFileChange = (event)=>{
     event.preventDefault()
     let paragraph = document.querySelector('.preview-par')
-
     setFile(event.target.files[0])
     paragraph.textContent =`${event.target.files[0].name}` 
   }
   const  onFileUpload = async (e)=>{
     e.preventDefault()
-    if(!selectedFile){
+    if(!selectedFile||selectedFile.length==0){
       alert('please select a file first')
       return
     }
     const formData = new FormData()
     formData.append('file',selectedFile)
 
-    const uploadResponse = await fetch('http://localhost:3000/upload',{
-      method:"POST",
+  const uploadResponse = await fetch('https://list-backend-production-7f51.up.railway.app/uploads',{ method:"POST",
       body:formData
     })
-    const uploadData = await uploadResponse.json()
     const fileResponse = await analyzePdf(selectedFile)
-   console.log(uploadData) 
     if(fileResponse && !fileResponse.error){
  let paragraph = document.querySelector('.preview-par') 
  paragraph.textContent = 'File Uploaded'
@@ -143,13 +139,22 @@ setProjectNameInput('')
  setTimeout(()=>{
   paragraph.textContent = 'No Files Selected'
   setLoading(false)
- },'10000')
+ },'1000')
 
     setUserInput(fileResponse)
     setFinished(true)
     }
- 
+else if(fileResponse.error){
+  alert(`${fileResponse.error} yes`)
+} 
 else {
+
+ let paragraph = document.querySelector('.preview-par') 
+  setFile([])
+ setTimeout(()=>{
+  paragraph.textContent = 'No Files Selected'
+  setLoading(false)
+ },'100')
   alert('but there is no file')
   setTypeOfError(`Didn't get the file`)
 }  
