@@ -270,7 +270,7 @@ position: relative;
 }
 .progressCounterContainer{
   position:absolute;
-  right:0%
+right:0%
 }
 
 li{
@@ -330,7 +330,9 @@ li{
 .change:hover{
   cursor: pointer;
 }
+
 .change{
+  font-size:smaller;
   position: relative;
   top:-2px;
 }
@@ -355,4 +357,8 @@ li{
   margin-top:12px;
   position: absolute;
   right:20px;
+}
+
+.break{
+  font-size:smaller;
 }

@@ -1,7 +1,5 @@
 import { useState,useEffect } from "react";
 import useListStore from "../store/useListStore";
-import { ProgressBar } from "react-bootstrap";
-import { SiElsevier } from "react-icons/si";
 function List_Projects({projects}){
 let {toggleTaskCompletion,deleteProject,completeAll,resetAll} = useListStore()
 let {completed, setCompleted} = useState([])
@@ -23,9 +21,7 @@ const handleToggle = (taskId)=>{
     })
   })
 }
-// useEffect(()=>{
-//   console.log(projects)
-// },[projects[1]])
+
 return<>
     {projects && projects.length>0?    
     (<>
@@ -58,7 +54,7 @@ return<>
           <div>
             <div className="list-item">
         <button  className='list-Button' onClick={()=>toggleTaskCompletion(project.id,item.id)}>
-      <p className={` ${item.completed? 'item_completed':''} todo_items_left`}><span className="change">{item.number}{item.word}</span></p>
+      <p className={` ${item.completed? 'item_completed':''} todo_items_left`}><span className={`change ${item.word.length>50?'break':''}`}>{item.number}{item.word}</span></p>
         </button>
         <button className= {`toggle-btn project-btn`} data-task-id={`${item.id}`} onClick={()=>handleToggle(item.id)}>Show Sub-topics</button>
             </div>
@@ -75,7 +71,9 @@ return<>
         ):(
     <div key={item.id}>
         <button style={{marginLeft:`${item.depth * 20}px`}} onClick={()=>toggleTaskCompletion(project.id,item.id)}>
-      <p className={`todo_items_left ${item.completed? 'item_completed':''}`}>{item.number}{item.word}</p>
+      <p className={`todo_items_left ${item.completed? 'item_completed':''}`}><span className={`change ${item.word.length>20?'break':''}`}>
+        {item.number}{item.word}
+        </span></p>
         </button>
     </div>
         )  
