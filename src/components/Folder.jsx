@@ -128,7 +128,7 @@ setProjectNameInput('')
     const formData = new FormData()
     formData.append('file',selectedFile)
 
-  const uploadResponse = await fetch('https://list-backend-production-7f51.up.railway.app/',{ method:"POST",
+  const uploadResponse = await fetch('https://list-backend-production-7f51.up.railway.app',{ method:"POST",
       body:formData
     })
     const fileResponse = await analyzePdf(selectedFile)
