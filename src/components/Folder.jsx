@@ -128,7 +128,7 @@ setProjectNameInput('')
     const formData = new FormData()
     formData.append('file',selectedFile)
 
-  const uploadResponse = await fetch('http://localhost:3000/uploads',{ method:"POST",
+  const uploadResponse = await fetch('https://list-backend-production-7f51.up.railway.app/',{ method:"POST",
       body:formData
     })
     const fileResponse = await analyzePdf(selectedFile)
@@ -176,7 +176,7 @@ else {
   <div className='cube'>
       <div className='title--background'>
         <h1>Course Checklist</h1>
-          <span>Create and manage your course content</span>
+          <span>Cross off topics from your course content</span>
         </div>
         <div className="input--container">
       <form className='formInput' onSubmit={handleSubmit}>
