@@ -38,7 +38,7 @@ return<>
         </div>
         
         <div id='myProgress'>
-          <div className="myBar" style={{width:`${projects[id].tasks.filter(x=>x.completed).length*100/projects[id].tasks.length}%`}}>
+        <div className="myBar" style={{width:`${projects[id].tasks.filter(x=>x.completed).length*100/projects[id].tasks.length}%`}}>
             <p></p>
           </div>
         </div>

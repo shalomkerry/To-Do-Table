@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import analyzePdf from "../../trying"
+import analyzePdf from "../../trying.js"
 import useListStore from "../store/useListStore"
 import List_Projects from "./Projects"
-import DragNdrop from "./DragndDrop"
 function GetFile(){
 let store = useListStore()
 let [finalList,setFinalList] = useState([]);
@@ -118,6 +117,7 @@ setProjectNameInput('')
     let paragraph = document.querySelector('.preview-par')
     setFile(event.target.files[0])
     paragraph.textContent =`${event.target.files[0].name}` 
+    console.log(event.target.files[0])
   }
   const  onFileUpload = async (e)=>{
     e.preventDefault()
@@ -128,7 +128,7 @@ setProjectNameInput('')
     const formData = new FormData()
     formData.append('file',selectedFile)
 
-  const uploadResponse = await fetch('https://list-backend-production-7f51.up.railway.app/uploads',{ method:"POST",
+  const uploadResponse = await fetch('http://localhost:3000/uploads',{ method:"POST",
       body:formData
     })
     const fileResponse = await analyzePdf(selectedFile)
@@ -190,8 +190,8 @@ else {
         </form>
   <form onSubmit={onFileUpload} className='secondForm'>
    <div className="fileInput">
-    <label htmlFor="file_uploads" className="fileLabel">Insert Course Outline File (pdf)</label>
-    <input type="file" id='file_uploads' onChange={(e)=>onFileChange (e)} accept=".pdf" /> 
+    <label htmlFor="file_uploads" className="fileLabel">Insert Course Outline File (pdf,doc,docx files)</label>
+    <input type="file" id='file_uploads' onChange={(e)=>onFileChange (e)} accept=".pdf,.docx,.doc" /> 
     <div className="preview">
     <p className="preview-par">No files selected</p>
     </div>
@@ -208,7 +208,6 @@ else {
         </div>
     </div>
 
-  <hr style={{width:"100%", border:"none",height:'1px', backgroundColor:'black'}}/>
 <div className="separate"></div>
     <div className='projects'>
     {projects && projects.length>0?(
