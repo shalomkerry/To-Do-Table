@@ -9,11 +9,9 @@ const genAI = new GoogleGenerativeAI(`${API}`);
 const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
 
-const response = await fetch(`https://list-backend-production-7f51.up.railway.app/read-file/${file.name}`)
+const response = await fetch(`http://localhost:3000/read-file/${file.name}`)
 try{
-
 if(!response.ok) {
-    console.log(response.status)
     throw new Error("File Nott Found")
 }
     const data = await response.json()
