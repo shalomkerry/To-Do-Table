@@ -8,8 +8,8 @@ const genAI = new GoogleGenerativeAI(`${API}`);
 
 const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
-
 const response = await fetch(`http://localhost:3000/read-file/${file.name}`)
+
 try{
 if(!response.ok) {
     throw new Error("File Nott Found")
