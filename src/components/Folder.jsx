@@ -194,7 +194,7 @@ else {
   <form onSubmit={onFileUpload} className='secondForm'>
    <div className="fileInput">
     <label htmlFor="file_uploads" className="fileLabel">Insert Course Outline File (pdf,doc,docx files)</label>
-    <input type="file" id='file_uploads' onChange={(e)=>onFileChange (e)} accept=".pdf,.docx,.doc" /> 
+    <input type="file" id='file_uploads' onChange={(e)=>onFileChange (e)} accept=".pdf,.docx" /> 
     <div className="preview">
     <p className="preview-par">No files selected</p>
     </div>
