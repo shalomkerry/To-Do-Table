@@ -91,7 +91,6 @@ setId()
 
 children.forEach(x=>{
   saveTaskList(x)
-  // x.children.length>0?x.children.map(j=>saveTaskList(j)):''
 })
 
 saveProjects()
@@ -99,7 +98,7 @@ saveProjects()
 setFinalList([])
 }
 }else{
-  alert('insert a list with numbers and .')
+  alert('Please input a proper table of Content')
 }
   }
 
@@ -181,9 +180,13 @@ else {
         <div className="input--container">
       <form className='formInput' onSubmit={handleSubmit}>
          <label htmlFor="projectName" className='labelName'>Course Name</label> 
-         <input type="text" className='inputName' name='projectName' required placeholder='Enter course name' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} autoComplete="off" />
+         <input type="text" className='inputName' name='projectName' required placeholder='Psychology' value={projectNameInput} onChange={(e)=>setProjectNameInput(e.target.value)} autoComplete="off" />
          <label htmlFor="textArea" className='labelProject'>Course Content</label>
-          <textarea name="textArea" className='inputList' id="" width='max-content' placeholder='Enter course content'height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
+          <textarea name="textArea" className='inputList' id="" width='max-content' placeholder='1. Introduction
+2. First Major Section
+3. Second Major Section
+... 
+          ' height='max-content' value={userInput} onChange={(e)=>setUserInput(e.target.value)}  required></textarea>
           <button type="submit" className='submitBtn' >
         Add Checklist
           </button>
@@ -215,7 +218,7 @@ else {
       
     )
     :    
-    (<p>No project started yet</p>)
+    (<p>You should probably start studying man</p>)
     }
     </div>
   </>

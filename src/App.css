@@ -121,7 +121,6 @@ opacity: 0.8;
 }
 
 
-
 .inputName,.inputList{
   padding:0.6em;
   background:#f4f4f5 ;
@@ -168,7 +167,7 @@ opacity: 0.8;
   background-color: #6366f1;
   padding: 5px 10px;
   border-radius: 5px;
-  font-size:1.5rem;
+  font-size:1.68rem;
   height: auto;
 }
 
@@ -189,7 +188,7 @@ opacity: 0.8;
   margin-top:1em;
   height: 1em;
   background-color: #5B4965;
-  margin-bottom: 2em;
+  margin-bottom: 1.5em;
   border-radius: 10px;
 }
 
@@ -231,11 +230,6 @@ color:black;
   gap:20px;
 }
 
-.project-btn{
-  /* background:#E9B0B0;
-  padding:2px;
-  width:fit-content; */
-}
 .project-btn:hover{
   cursor:pointer;
   transform: scale(1.05);
@@ -257,6 +251,7 @@ color:black;
   width:650px;
   height:max-content;
   border-radius: 20px;
+  margin-bottom: 2em;;
   }
 
 .countProgress{
